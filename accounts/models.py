@@ -12,12 +12,12 @@ class Permission(models.Model):
 
 
 class UserGroupPermission(models.Model):
-    permission = models.ForeignKey(Permission)
-    user_group = models.ForeignKey(UserGroup)
+    permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
+    user_group = models.ForeignKey(UserGroup, on_delete=models.CASCADE)
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    user_group = models.ForeignKey(UserGroup)
+    user_group = models.ForeignKey(UserGroup, on_delete=models.CASCADE)
 
 

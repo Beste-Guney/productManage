@@ -14,8 +14,8 @@ class Category(models.Model):
 class ProductType(models.Model):
     product_name = models.CharField(max_length=255)
     image = models.CharField(max_length=255)
-    category_id = models.ForeignKey(Category)
-    created_by = models.ForeignKey(UserProfile)
+    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     gtin_number = models.IntegerField(primary_key=True)
     #company =
@@ -23,7 +23,7 @@ class ProductType(models.Model):
 
 
 class Product(models.Model):
-    product_type = models.ForeignKey(ProductType)
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
     guid = models.CharField(max_length=255, primary_key=True)
     manufacture_date = models.DateTimeField(auto_now_add=True)
     expiration_date = models.DateTimeField(auto_now_add=True)

@@ -17,7 +17,7 @@ class UserGroupPermission(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_group = models.ForeignKey(UserGroup, on_delete=models.CASCADE)
 
 

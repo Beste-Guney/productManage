@@ -4,7 +4,7 @@ from business.models import Company
 from owlready2 import *
 
 # ontology location
-onto = get_ontology("http://test.org/onto.owl")
+onto = get_ontology("./ontology.owl")
 
 # ontology classes
 with onto:
@@ -23,6 +23,7 @@ with onto:
     class ItemLogOnto(Thing):
         pass
 
+
     class has_category(ProductTypeOnto >> CategoryOnto):
         pass
 
@@ -37,9 +38,21 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
+    __original_name = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_name = self.category_name
+
     def save(self, *args, **kwargs):
         super(Category, self).save(*args, **kwargs)
-        new_category = CategoryOnto(self.category_name)
+        if self.__original_name:
+            original_onto_name = CategoryOnto(self.__original_name)
+            original_onto_name.name = self.category_name
+            onto.save(file='./ontology.owl')
+        else:
+            new_category = CategoryOnto(self.category_name)
+        onto.save(file='./ontology.owl')
 
 
 class ProductType(models.Model):
@@ -52,10 +65,25 @@ class ProductType(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField(default=True)
 
+    __original_name = None
+    __original_category = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_name = self.product_name
+
     def save(self, *args, **kwargs):
         super(ProductType, self).save(*args, **kwargs)
-        product_type_onto = ProductTypeOnto(self.product_name)
-        product_type_onto.has_category.append(self.category.category_name)
+        if self.__original_name:
+            original_onto_name = ProductTypeOnto(self.__original_name)
+            original_onto_name.name = self.product_name
+            original_category = CategoryOnto(self.category.category_name)
+            original_onto_name.has_category = [original_category]
+        else:
+            product_type_onto = ProductTypeOnto(self.product_name)
+            original_category = CategoryOnto(self.category.category_name)
+            product_type_onto.has_category = [original_category]
+        onto.save(file='./ontology.owl')
 
 
 class Product(models.Model):
@@ -68,11 +96,15 @@ class Product(models.Model):
     previous_owner = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='pre_owner', null=True)
     current_owner = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='cur_owner', null=True)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     def save(self, *args, **kwargs):
         super(Product, self).save(*args, **kwargs)
         product_onto = ProductOnto(self.product_type.product_name + self.guid)
-        product_onto.has_product_type.append(self.product_type.product_name)
-
+        product_type_onto = ProductTypeOnto(self.product_type.product_name)
+        product_onto.has_product_type = [product_type_onto]
+        onto.save(file='./ontology.owl')
 
 
 class ItemLog(models.Model):

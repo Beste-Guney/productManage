@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="./ontology.owl"
+         xmlns="./ontology.owl#">
+
+<owl:Ontology rdf:about="./ontology.owl"/>
+
+<owl:ObjectProperty rdf:about="#has_category">
+  <rdfs:domain rdf:resource="#ProductTypeOnto"/>
+  <rdfs:range rdf:resource="#CategoryOnto"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#has_product_type">
+  <rdfs:domain rdf:resource="#ProductOnto"/>
+  <rdfs:range rdf:resource="#ProductTypeOnto"/>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="#CategoryOnto">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#ProductTypeOnto">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#ProductOnto">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#ItemLogOnto">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<ProductOnto rdf:about="#tobleron121">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <has_product_type rdf:resource="#tobleron"/>
+</ProductOnto>
+
+<ProductTypeOnto rdf:about="#tobleron">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <has_category rdf:resource="#cikolata"/>
+</ProductTypeOnto>
+
+<CategoryOnto rdf:about="#mısırUNu">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</CategoryOnto>
+
+<CategoryOnto rdf:about="#cikolata">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</CategoryOnto>
+
+<ProductOnto rdf:about="#tobleron44">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <has_product_type rdf:resource="#tobleron"/>
+</ProductOnto>
+
+
+</rdf:RDF>

@@ -1,7 +1,16 @@
 import product as product
 from django.db import models
 from accounts.models import UserProfile
+from owlready2 import *
+#from product.models import ProductOnto
 
+# ontology location
+onto = get_ontology("./ontology.owl")
+
+# ontology classes
+with onto:
+    class CompanyOnto(Thing):
+        pass
 
 # Create your models here.
 class ActionLog(models.Model):
@@ -24,5 +33,21 @@ class Company(models.Model):
     company_type = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
 
+    __original_name = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_name = self.company_name
+
+    def save(self, *args, **kwargs):
+        super(Company, self).save(*args, **kwargs)
+        if self.__original_name:
+            original_onto_name = CompanyOnto(self.__original_name)
+            original_onto_name.name = self.company_name
+            onto.save(file='./ontology.owl')
+        else:
+
+            new_category = CompanyOnto(self.company_name)
+        onto.save(file='./ontology.owl')
 
 

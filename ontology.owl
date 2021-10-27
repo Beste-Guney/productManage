@@ -18,6 +18,15 @@
   <rdfs:range rdf:resource="#ProductTypeOnto"/>
 </owl:ObjectProperty>
 
+<owl:ObjectProperty rdf:about="#has_product">
+  <rdfs:domain rdf:resource="#CompanyOnto"/>
+  <rdfs:range rdf:resource="#ProductOnto"/>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="#CompanyOnto">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
 <owl:Class rdf:about="#CategoryOnto">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
 </owl:Class>
@@ -34,27 +43,26 @@
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
 </owl:Class>
 
-<ProductOnto rdf:about="#tobleron121">
+<CompanyOnto rdf:about="#algida">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <has_product_type rdf:resource="#tobleron"/>
-</ProductOnto>
+</CompanyOnto>
 
-<ProductTypeOnto rdf:about="#tobleron">
+<ProductTypeOnto rdf:about="#max">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <has_category rdf:resource="#cikolata"/>
 </ProductTypeOnto>
 
-<CategoryOnto rdf:about="#mısırUNu">
+<CategoryOnto rdf:about="#dondurmak">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
 </CategoryOnto>
 
-<CategoryOnto rdf:about="#cikolata">
+<CompanyOnto rdf:about="#eti">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</CategoryOnto>
+  <has_product rdf:resource="#max119"/>
+</CompanyOnto>
 
-<ProductOnto rdf:about="#tobleron44">
+<ProductOnto rdf:about="#max119">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <has_product_type rdf:resource="#tobleron"/>
+  <has_product_type rdf:resource="#max"/>
 </ProductOnto>
 
 

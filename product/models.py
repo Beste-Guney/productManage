@@ -2,9 +2,11 @@ from django.db import models
 from accounts.models import UserProfile
 from business.models import Company
 from owlready2 import *
+from business.models import CompanyOnto
 
 # ontology location
 onto = get_ontology("./ontology.owl")
+
 
 # ontology classes
 with onto:
@@ -24,11 +26,40 @@ with onto:
         pass
 
 
+    class CompanyOnto(Thing):
+        pass
+
+
     class has_category(ProductTypeOnto >> CategoryOnto):
         pass
 
+
     class has_product_type(ProductOnto >> ProductTypeOnto):
         pass
+
+
+    class has_product(CompanyOnto >> ProductOnto):
+        pass
+
+
+    class product_category(ProductOnto >> CategoryOnto):
+        pass
+
+    rule = Imp()
+    rule.set_as_rule(
+        """ ProductOnto(?p), has_product_type(?p, ?d), has_category(?d, ?c) -> product_category(?p, ?c)""")
+
+    cate_onto = CategoryOnto('cikolata')
+    type_onto = ProductTypeOnto('bitter', has_category=[cate_onto])
+    pro_onto = ProductOnto('bitter1', has_product_type=[type_onto])
+
+    #sync_reasoner_pellet(infer_property_values=True, infer_data_property_values=True)
+    print(str(rule))
+    print(cate_onto)
+    print(type_onto.has_category)
+    print(pro_onto.has_product_type)
+    print('jfdhjdhdjshf')
+    print(pro_onto.product_category)
 
 
 # Create your models here.
@@ -102,8 +133,12 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         super(Product, self).save(*args, **kwargs)
         product_onto = ProductOnto(self.product_type.product_name + self.guid)
+        destroy_entity(product_onto)
+        product_onto2 = ProductOnto(self.product_type.product_name + self.guid)
+        company_onto_current = CompanyOnto(self.current_owner.company_name)
+        company_onto_current.has_product.append(product_onto2)
         product_type_onto = ProductTypeOnto(self.product_type.product_name)
-        product_onto.has_product_type = [product_type_onto]
+        product_onto2.has_product_type = [product_type_onto]
         onto.save(file='./ontology.owl')
 
 
